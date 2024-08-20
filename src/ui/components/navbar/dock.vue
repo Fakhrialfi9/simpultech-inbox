@@ -61,7 +61,7 @@
       <div v-if="activeSelect" class="select" ref="dropdown">
         <ul>
           <li @click="closeSelect">
-            <a href="http://localhost:5174/"> <ListTodo :size="15" /> Go to Task Manager</a>
+            <a href="https://simpultech-taskmanagement.vercel.app/"> <ListTodo :size="15" /> Go to Task Manager</a>
           </li>
           <li @click="handleSchemaColor">
             <a v-if="isDarkMode"> <Sun :size="15" /> Light Mode </a>
