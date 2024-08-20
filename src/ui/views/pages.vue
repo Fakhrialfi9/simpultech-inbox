@@ -20,10 +20,6 @@
     const storedColor = localStorage.getItem(`avatar-color-${participantId}`);
     if (storedColor) {
       return storedColor;
-    } else {
-      const newColor = getRandomColor();
-      localStorage.setItem(`avatar-color-${participantId}`, newColor);
-      return newColor;
     }
   };
 
