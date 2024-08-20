@@ -5,11 +5,9 @@
   import { Ellipsis, Trash2, Pencil, Share, Reply } from "lucide-vue-next";
 
   const route = useRoute();
-  const conversationId = route.params.id;
+  const conversationId = route.params.id as string;
 
-  const conversation = computed(() => {
-    return conversations.find((c) => c.id === conversationId);
-  });
+  const conversation = computed(() => conversations.find((c) => c.id === conversationId));
 
   if (!conversation.value) {
     throw new Error(`Conversation with id ${conversationId} not found`);
@@ -22,43 +20,27 @@
 
   const scrollToElement = (selector: string) => {
     const element = document.querySelector(selector);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    element?.scrollIntoView({ behavior: "smooth" });
   };
 
   const isToday = (date: Date) => {
     const today = new Date();
-    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+    return date.toDateString() === today.toDateString();
   };
 
   const isNewDay = (currentTimestamp: string, previousTimestamp: string) => {
-    const currentDate = new Date(currentTimestamp);
-    const previousDate = new Date(previousTimestamp);
-    return currentDate.toDateString() !== previousDate.toDateString();
+    return new Date(currentTimestamp).toDateString() !== new Date(previousTimestamp).toDateString();
   };
 
   const activeSelectId = ref<string | null>(null);
 
   const toggleDropdown = (messageId: string) => {
-    closeAllDropdowns();
-    if (activeSelectId.value === messageId) {
-      activeSelectId.value = null;
-    } else {
-      activeSelectId.value = messageId;
-    }
-  };
-
-  const closeAllDropdowns = () => {
-    activeSelectId.value = false;
+    activeSelectId.value = activeSelectId.value === messageId ? null : messageId;
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    const dropdowns = document.querySelectorAll(".select");
-    const isClickOutside = Array.from(dropdowns).every((dropdown) => !dropdown.contains(event.target as Node));
-
-    if (isClickOutside) {
-      closeAllDropdowns();
+    if (!document.querySelector(".select")?.contains(event.target as Node)) {
+      activeSelectId.value = null;
     }
   };
 
@@ -113,7 +95,7 @@
 
             <code v-if="isLoading" class="loadingconversation">
               <div class="spinner"></div>
-              <h5>Please wait while we connect you with one of our team ...</h5>
+              <h5>Please wait while we connect you with one of our team...</h5>
             </code>
 
             <div
@@ -135,16 +117,16 @@
                 <div v-if="activeSelectId === message.id" class="select" ref="dropdown">
                   <ul>
                     <li>
-                      <a href=""> <Pencil :size="15" /> Edit Message</a>
+                      <a href="#"> <Pencil :size="15" /> Edit Message</a>
                     </li>
                     <li>
-                      <a href=""> <Share :size="15" /> Share Message</a>
+                      <a href="#"> <Share :size="15" /> Share Message</a>
                     </li>
                     <li>
-                      <a href=""> <Reply :size="15" /> Reply Message</a>
+                      <a href="#"> <Reply :size="15" /> Reply Message</a>
                     </li>
                     <li>
-                      <a href=""> <Trash2 :size="15" /> Delete Message</a>
+                      <a href="#"> <Trash2 :size="15" /> Delete Message</a>
                     </li>
                   </ul>
                 </div>

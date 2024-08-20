@@ -16,29 +16,23 @@
 
   const conversationsData = ref(conversations);
 
-  const getBackgroundColor = (participantId) => {
-    const storedColor = localStorage.getItem(`avatar-color-${participantId}`);
-    if (storedColor) {
-      return storedColor;
-    }
+  const getBackgroundColor = (participantId: string) => {
+    return localStorage.getItem(`avatar-color-${participantId}`);
   };
 
-  const assignAvatarColors = (participants) => {
-    return participants.map((participant) => {
-      return {
-        ...participant,
-        backgroundColor: getBackgroundColor(participant.id),
-      };
-    });
+  const assignAvatarColors = (participants: { id: string; backgroundColor?: string }[]) => {
+    return participants.map((participant) => ({
+      ...participant,
+      backgroundColor: getBackgroundColor(participant.id),
+    }));
   };
 
-  const getLastMessage = (messages) => {
-    if (!messages || messages.length === 0) return null;
-    return messages.reduce((latest, message) => (new Date(message.timestamp) > new Date(latest.timestamp) ? message : latest));
+  const getLastMessage = (messages: { timestamp: string }[]) => {
+    return messages.reduce((latest, message) => (new Date(message.timestamp) > new Date(latest.timestamp) ? message : latest), messages[0]);
   };
 
-  const formatLastMessageDate = (timestamp) => formatDate(timestamp);
-  const formatLastMessageTime = (timestamp) => formatTime(timestamp);
+  const formatLastMessageDate = (timestamp: string) => formatDate(timestamp);
+  const formatLastMessageTime = (timestamp: string) => formatTime(timestamp);
 </script>
 
 <template>
